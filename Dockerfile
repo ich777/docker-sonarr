@@ -8,6 +8,7 @@ RUN apt-get update && \
 ENV DATA_DIR="/sonarr"
 ENV SONARR_REL="latest"
 ENV START_PARAMS=""
+ENV MONO_START_PARAMS="--debug"
 ENV UMASK=0000
 ENV DATA_PERM=770
 ENV UID=99
