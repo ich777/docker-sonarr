@@ -27,7 +27,7 @@ RUN chmod -R 770 /opt/scripts/ && \
 	chmod -R 770 /mnt && \
 	chown -R $UID:$GID /mnt
 
-EXPOSE 8080 9090
+EXPOSE 8989
 
 #Server Start
 ENTRYPOINT ["/opt/scripts/start.sh"]
