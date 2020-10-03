@@ -2,6 +2,10 @@ FROM ich777/mono-baseimage
 
 LABEL maintainer="admin@minenet.at"
 
+RUN apt-get update && \
+	apt-get -y install --no-install-recommends mediainfo && \
+	rm -rf /var/lib/apt/lists/*
+
 ENV DATA_DIR="/sonarr"
 ENV SONARR_REL="latest"
 ENV START_PARAMS=""
