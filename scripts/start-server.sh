@@ -97,4 +97,8 @@ chmod -R ${DATA_PERM} ${DATA_DIR}
 
 echo "---Starting Sonarr---"
 cd ${DATA_DIR}
-/usr/bin/mono ${MONO_START_PARAMS} ${DATA_DIR}/Sonarr/NzbDrone.exe -nobrowser -data=${DATA_DIR} ${START_PARAMS}
+if [ "$SONARR_REL" == "nightly" ]; then
+    /usr/bin/mono ${MONO_START_PARAMS} ${DATA_DIR}/Sonarr/Sonarr.exe -nobrowser -data=${DATA_DIR} ${START_PARAMS}
+else
+    /usr/bin/mono ${MONO_START_PARAMS} ${DATA_DIR}/Sonarr/NzbDrone.exe -nobrowser -data=${DATA_DIR} ${START_PARAMS}
+fi
