@@ -16,7 +16,6 @@ ENV USER="sonarr"
 
 RUN mkdir $DATA_DIR && \
 	mkdir /mnt/downloads && \
-	mkdir /mnt/incomplete && \
     mkdir /mnt/tv && \
 	useradd -d $DATA_DIR -s /bin/bash $USER && \
 	chown -R $USER $DATA_DIR && \
