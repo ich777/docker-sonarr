@@ -1,5 +1,4 @@
 #!/bin/bash
-sleep infinity
 if [ "$SONARR_REL" == "latest" ]; then
     LAT_V="$(wget -qO- https://github.com/ich777/versions/raw/master/Sonarr | grep LATEST | cut -d '=' -f2)"
 elif [ "$SONARR_REL" == "nightly" ]; then
