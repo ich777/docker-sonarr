@@ -92,6 +92,8 @@ if [ ! -f ${DATA_DIR}/config.xml ]; then
 fi
 if [ -f ${DATA_DIR}/nzbdrone.pid ]; then
     rm ${DATA_DIR}/nzbdrone.pid
+elif [ -f ${DATA_DIR}/sonarr.pid ]; then
+    ${DATA_DIR}/sonarr.pid
 fi
 chmod -R ${DATA_PERM} ${DATA_DIR}
 
