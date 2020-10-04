@@ -24,7 +24,7 @@ Sonarr is a PVR for Usenet and BitTorrent users. It can monitor multiple RSS fee
 ## Run example
 ```
 docker run --name Sonarr -d \
-	-p 7878:7878 \
+	-p 8989:8989 \
 	--env 'SONARR_REL=nightly' \
 	--env 'MONO_START_PARAMS=--debug' \
 	--env 'UID=99' \
