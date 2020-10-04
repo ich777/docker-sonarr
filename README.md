@@ -31,7 +31,7 @@ docker run --name Sonarr -d \
 	--env 'GID=100' \
 	--env 'UMASK=0000' \
 	--env 'DATA_PERMS=770' \
-	--volume /mnt/cache/appdata/radarr:/radarr \
+	--volume /mnt/cache/appdata/sonarr:/sonarr \
 	--volume /mnt/user/TV-Shows:/mnt/tv \
 	--volume /mnt/user/Downloads:/mnt/downloads \
 	ich777/sonarr
