@@ -3,7 +3,7 @@ FROM ich777/mono-baseimage
 LABEL maintainer="admin@minenet.at"
 
 RUN apt-get update && \
-	apt-get -y install --no-install-recommends mediainfo && \
+	apt-get -y install --no-install-recommends mediainfo libicu63 && \
 	rm -rf /var/lib/apt/lists/*
 
 ENV DATA_DIR="/sonarr"
