@@ -8,10 +8,10 @@ else
     LAT_V="$SONARR_REL"
 fi
 
-if [ ! -f ${DATA_DIR}/logs/sonarr.txt ]; then
+if [ ! -f ${DATA_DIR}/Sonarr/release_info ]; then
     CUR_V=""
 else
-    CUR_V="$(cat ${DATA_DIR}/logs/sonarr.txt | grep " - Version" | tail -1 | rev | cut -d ' ' -f1 | rev)"
+    CUR_V="$(cat ${DATA_DIR}/Sonarr/release_info  | grep "ReleaseVersion" | cut -d '=' -f2)"
 fi
 
 if [ -z $LAT_V ]; then
