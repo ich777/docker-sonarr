@@ -111,6 +111,16 @@ elif [ -f ${DATA_DIR}/sonarr.pid ]; then
 fi
 chmod -R ${DATA_PERM} ${DATA_DIR}
 
+echo "+-------------------------------------------------------------"
+echo "|"
+echo "| This container for ARM is deprecated and is no"
+echo "| longer actively maintained or further developed!"
+echo "|"
+echo "|  Container will start in 60 seconds!"
+echo "|"
+echo "+-------------------------------------------------------------"
+sleep 60
+
 echo "---Starting Sonarr---"
 cd ${DATA_DIR}
 if [ "$SONARR_REL" == "nightly" ]; then
