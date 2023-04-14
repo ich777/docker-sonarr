@@ -11,7 +11,7 @@ fi
 if [ ! -f ${DATA_DIR}/Sonarr/release_info ]; then
     CUR_V=""
 else
-    CUR_V="$(cat ${DATA_DIR}/Sonarr/release_info  | grep "ReleaseVersion" | cut -d '=' -f2)"
+    CUR_V="$(cat ${DATA_DIR}/Sonarr/release_info | grep "ReleaseVersion" | cut -d '=' -f2)"
 fi
 
 if [ -z $LAT_V ]; then
@@ -20,6 +20,7 @@ if [ -z $LAT_V ]; then
         sleep infinity
     else
         echo "---Can't get latest version of Sonarr, falling back to v$CUR_V---"
+        LAT_V="$CUR_V"
     fi
 fi
 
@@ -32,16 +33,12 @@ if [ "$SONARR_REL" == "nightly" ]; then
     if [ -z "$CUR_V" ]; then
         echo "---Sonarr not found, downloading and installing v$LAT_V...---"
         cd ${DATA_DIR}
-        if wget -q -nc --show-progress --progress=bar:force:noscroll -O ${DATA_DIR}/Sonarr-v$LAT_V.tar.gz "https://download.sonarr.tv/v3/phantom-develop/${LAT_V}/Sonarr.phantom-develop.${LAT_V}.linux.tar.gz" ; then
+        if wget -q -nc --show-progress --progress=bar:force:noscroll -O ${DATA_DIR}/Sonarr-v$LAT_V.tar.gz "https://download.sonarr.tv/v4/develop/${LAT_V}/Sonarr.develop.${LAT_V}.linux-x64.tar.gz" ; then
             echo "---Successfully downloaded Sonarr v$LAT_V---"
         else
             rm ${DATA_DIR}/Sonarr-v$LAT_V.tar.gz
-            if wget -q -nc --show-progress --progress=bar:force:noscroll -O ${DATA_DIR}/Sonarr-v$LAT_V.tar.gz "https://github.com/ich777/Sonarr/releases/download/${LAT_V}/v${LAT_V}.tar.gz" ; then
-                echo "---Successfully downloaded Sonarr v$LAT_V---"
-            else
-                echo "---Something went wrong, can't download Sonarr v$LAT_V, putting container into sleep mode!---"
-                sleep infinity
-            fi
+            echo "---Something went wrong, can't download Sonarr v$LAT_V, putting container into sleep mode!---"
+            sleep infinity
         fi
         mkdir ${DATA_DIR}/Sonarr
         tar -C ${DATA_DIR}/Sonarr --strip-components=1 -xf ${DATA_DIR}/Sonarr-v$LAT_V.tar.gz
@@ -49,21 +46,19 @@ if [ "$SONARR_REL" == "nightly" ]; then
     elif [ "$CUR_V" != "$LAT_V" ]; then
         echo "---Version missmatch, installed v$CUR_V, downloading and installing latest v$LAT_V...---"
         cd ${DATA_DIR}
-        if wget -q -nc --show-progress --progress=bar:force:noscroll -O ${DATA_DIR}/Sonarr-v$LAT_V.tar.gz "https://download.sonarr.tv/v3/phantom-develop/${LAT_V}/Sonarr.phantom-develop.${LAT_V}.linux.tar.gz" ; then
+        if wget -q -nc --show-progress --progress=bar:force:noscroll -O ${DATA_DIR}/Sonarr-v$LAT_V.tar.gz "https://download.sonarr.tv/v4/develop/${LAT_V}/Sonarr.develop.${LAT_V}.linux-x64.tar.gz" ; then
             echo "---Successfully downloaded Sonarr v$LAT_V---"
         else
             rm ${DATA_DIR}/Sonarr-v$LAT_V.tar.gz
-            if wget -q -nc --show-progress --progress=bar:force:noscroll -O ${DATA_DIR}/Sonarr-v$LAT_V.tar.gz "https://github.com/ich777/Sonarr/releases/download/${LAT_V}/v${LAT_V}.tar.gz" ; then
-                echo "---Successfully downloaded Sonarr v$LAT_V---"
-            else
-                echo "---Something went wrong, can't download Sonarr v$LAT_V, putting container into sleep mode!---"
-                sleep infinity
-            fi
+            echo "---Something went wrong, can't download Sonarr v$LAT_V, falling back to v$CUR_V!---"
+            EXIT_STATUS=1
         fi
-        rm -R ${DATA_DIR}/Sonarr
-        mkdir ${DATA_DIR}/Sonarr
-        tar -C ${DATA_DIR}/Sonarr --strip-components=1 -xf ${DATA_DIR}/Sonarr-v$LAT_V.tar.gz
-        rm ${DATA_DIR}/Sonarr-v$LAT_V.tar.gz
+        if [ "${EXIT_STATUS}" != "1" ]; then
+            rm -R ${DATA_DIR}/Sonarr
+            mkdir ${DATA_DIR}/Sonarr
+            tar -C ${DATA_DIR}/Sonarr --strip-components=1 -xf ${DATA_DIR}/Sonarr-v$LAT_V.tar.gz
+            rm ${DATA_DIR}/Sonarr-v$LAT_V.tar.gz
+        fi
     elif [ "$CUR_V" == "$LAT_V" ]; then
         echo "---Sonarr v$CUR_V up-to-date---"
     fi
@@ -86,13 +81,16 @@ else
         if wget -q -nc --show-progress --progress=bar:force:noscroll -O ${DATA_DIR}/Sonarr-v$LAT_V.tar.gz "https://download.sonarr.tv/v3/main/${LAT_V}/Sonarr.main.${LAT_V}.linux.tar.gz" ; then
             echo "---Successfully downloaded Sonarr v$LAT_V---"
         else
-            echo "---Something went wrong, can't download Sonarr v$LAT_V, putting container into sleep mode!---"
-            sleep infinity
+            rm ${DATA_DIR}/Sonarr-v$LAT_V.tar.gz
+            echo "---Something went wrong, can't download Sonarr v$LAT_V, falling back to v$CUR_V!---"
+            EXIT_STATUS=1
         fi
-        rm -R ${DATA_DIR}/Sonarr
-        mkdir ${DATA_DIR}/Sonarr
-        tar -C ${DATA_DIR}/Sonarr --strip-components=1 -xf ${DATA_DIR}/Sonarr-v$LAT_V.tar.gz
-        rm ${DATA_DIR}/Sonarr-v$LAT_V.tar.gz
+        if [ "${EXIT_STATUS}" != "1" ]; then
+            rm -R ${DATA_DIR}/Sonarr
+            mkdir ${DATA_DIR}/Sonarr
+            tar -C ${DATA_DIR}/Sonarr --strip-components=1 -xf ${DATA_DIR}/Sonarr-v$LAT_V.tar.gz
+            rm ${DATA_DIR}/Sonarr-v$LAT_V.tar.gz
+        fi
     elif [ "$CUR_V" == "$LAT_V" ]; then
         echo "---Sonarr v$CUR_V up-to-date---"
     fi
