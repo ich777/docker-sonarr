@@ -42,6 +42,9 @@ if [ "$SONARR_REL" == "nightly" ]; then
         fi
         mkdir ${DATA_DIR}/Sonarr
         tar -C ${DATA_DIR}/Sonarr --strip-components=1 -xf ${DATA_DIR}/Sonarr-v$LAT_V.tar.gz
+        if [ ! -f ${DATA_DIR}/Sonarr/release_info ]; then
+            echo "ReleaseVersion=$LAT_V" > ${DATA_DIR}/Sonarr/release_info
+        fi
         rm ${DATA_DIR}/Sonarr-v$LAT_V.tar.gz
     elif [ "$CUR_V" != "$LAT_V" ]; then
         echo "---Version missmatch, installed v$CUR_V, downloading and installing latest v$LAT_V...---"
@@ -57,6 +60,11 @@ if [ "$SONARR_REL" == "nightly" ]; then
             rm -R ${DATA_DIR}/Sonarr
             mkdir ${DATA_DIR}/Sonarr
             tar -C ${DATA_DIR}/Sonarr --strip-components=1 -xf ${DATA_DIR}/Sonarr-v$LAT_V.tar.gz
+            if [ ! -f ${DATA_DIR}/Sonarr/release_info ]; then
+                echo "ReleaseVersion=$LAT_V" > ${DATA_DIR}/Sonarr/release_info
+            elif [ "$(cat ${DATA_DIR}/Sonarr/release_info | grep "ReleaseVersion" | cut -d '=' -f2)" != "${LAT_V}" ]; then
+                sed -i "/^ReleaseVersion=/c\ReleaseVersion=$LAT_V" ${DATA_DIR}/Sonarr/release_info
+            fi
             rm ${DATA_DIR}/Sonarr-v$LAT_V.tar.gz
         fi
     elif [ "$CUR_V" == "$LAT_V" ]; then
@@ -74,6 +82,9 @@ else
         fi
         mkdir ${DATA_DIR}/Sonarr
         tar -C ${DATA_DIR}/Sonarr --strip-components=1 -xf ${DATA_DIR}/Sonarr-v$LAT_V.tar.gz
+        if [ ! -f ${DATA_DIR}/Sonarr/release_info ]; then
+            echo "ReleaseVersion=$LAT_V" > ${DATA_DIR}/Sonarr/release_info
+        fi
         rm ${DATA_DIR}/Sonarr-v$LAT_V.tar.gz
     elif [ "$CUR_V" != "$LAT_V" ]; then
         echo "---Version missmatch, installed v$CUR_V, downloading and installing latest v$LAT_V...---"
@@ -89,6 +100,11 @@ else
             rm -R ${DATA_DIR}/Sonarr
             mkdir ${DATA_DIR}/Sonarr
             tar -C ${DATA_DIR}/Sonarr --strip-components=1 -xf ${DATA_DIR}/Sonarr-v$LAT_V.tar.gz
+            if [ ! -f ${DATA_DIR}/Sonarr/release_info ]; then
+                echo "ReleaseVersion=$LAT_V" > ${DATA_DIR}/Sonarr/release_info
+            elif [ "$(cat ${DATA_DIR}/Sonarr/release_info | grep "ReleaseVersion" | cut -d '=' -f2)" != "${LAT_V}" ]; then
+                sed -i "/^ReleaseVersion=/c\ReleaseVersion=$LAT_V" ${DATA_DIR}/Sonarr/release_info
+            fi
             rm ${DATA_DIR}/Sonarr-v$LAT_V.tar.gz
         fi
     elif [ "$CUR_V" == "$LAT_V" ]; then
@@ -111,4 +127,11 @@ chmod -R ${DATA_PERM} ${DATA_DIR}
 
 echo "---Starting Sonarr---"
 cd ${DATA_DIR}
-/usr/bin/mono ${MONO_START_PARAMS} ${DATA_DIR}/Sonarr/Sonarr.exe -nobrowser -data=${DATA_DIR} ${START_PARAMS}
+if [ -f ${DATA_DIR}/Sonarr/Sonarr.exe ]; then
+  /usr/bin/mono ${MONO_START_PARAMS} ${DATA_DIR}/Sonarr/Sonarr.exe -nobrowser -data=${DATA_DIR} ${START_PARAMS}
+elif [ -f ${DATA_DIR}/Sonarr/Sonarr ]; then
+  ${DATA_DIR}/Sonarr/Sonarr -nobrowser -data=${DATA_DIR} ${START_PARAMS}
+else
+  echo "---Something went wrong, can't find executable, putting container into sleep mode!"
+  sleep infinity
+fi
