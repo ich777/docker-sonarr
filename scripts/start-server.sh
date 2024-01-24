@@ -72,7 +72,7 @@ else
     if [ -z "$CUR_V" ]; then
         echo "---Sonarr not found, downloading and installing v$LAT_V...---"
         cd ${DATA_DIR}
-        if wget -q -nc --show-progress --progress=bar:force:noscroll -O ${DATA_DIR}/Sonarr-v$LAT_V.tar.gz "https://download.sonarr.tv/v4/main/${LAT_V}/Sonarr.main.${LAT_V}.linux-x64.tar.gz" ; then
+        if wget -q -nc --show-progress --progress=bar:force:noscroll -O ${DATA_DIR}/Sonarr-v$LAT_V.tar.gz "https://github.com/Sonarr/Sonarr/releases/download/v${LAT_V}/Sonarr.main.${LAT_V}.linux-x64.tar.gz" ; then
             echo "---Successfully downloaded Sonarr v$LAT_V---"
         else
             echo "---Something went wrong, can't download Sonarr v$LAT_V, putting container into sleep mode!---"
@@ -87,7 +87,7 @@ else
     elif [ "$CUR_V" != "$LAT_V" ]; then
         echo "---Version missmatch, installed v$CUR_V, downloading and installing latest v$LAT_V...---"
         cd ${DATA_DIR}
-        if wget -q -nc --show-progress --progress=bar:force:noscroll -O ${DATA_DIR}/Sonarr-v$LAT_V.tar.gz "https://download.sonarr.tv/v4/main/${LAT_V}/Sonarr.main.${LAT_V}.linux-x64.tar.gz" ; then
+        if wget -q -nc --show-progress --progress=bar:force:noscroll -O ${DATA_DIR}/Sonarr-v$LAT_V.tar.gz "https://github.com/Sonarr/Sonarr/releases/download/v${LAT_V}/Sonarr.main.${LAT_V}.linux-x64.tar.gz" ; then
             echo "---Successfully downloaded Sonarr v$LAT_V---"
         else
             rm ${DATA_DIR}/Sonarr-v$LAT_V.tar.gz
