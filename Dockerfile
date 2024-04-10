@@ -4,7 +4,7 @@ LABEL org.opencontainers.image.authors="admin@minenet.at"
 LABEL org.opencontainers.image.source="https://github.com/ich777/docker-sonarr"
 
 RUN apt-get update && \
-	apt-get -y install --no-install-recommends mediainfo libicu72 && \
+	apt-get -y install --no-install-recommends mediainfo libicu72 netcat-traditional && \
 	rm -rf /var/lib/apt/lists/*
 
 ENV DATA_DIR="/sonarr"
@@ -13,6 +13,7 @@ ENV START_PARAMS=""
 ENV MONO_START_PARAMS="--debug"
 ENV UMASK=0000
 ENV DATA_PERM=770
+ENV CONNECTED_CONTAINERS=""
 ENV UID=99
 ENV GID=100
 ENV USER="sonarr"
